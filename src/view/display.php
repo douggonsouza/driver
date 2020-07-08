@@ -1,9 +1,8 @@
 <?php
 
-namespace Nuclear\system\view;
+namespace driver\view;
 
-use Nuclear\system\view\mimes;
-use Nuclear\configs\cfg;
+use driver\view\mimes;
 
 class display{
 	

@@ -6,14 +6,14 @@ use Nuclear\system\routers\Router;
 use Nuclear\system\control\action;
 use Nuclear\system\request\request;
 use Nuclear\system\model\orm;
-use Nuclear\system\view\view;
+use driver\view\view;
 use Nuclear\system\routers\routerInterface;
 use Nuclear\system\nuclear;
 use Nuclear\loader\loader;
 use Nuclear\configs\cfg;
 use Nuclear\app\orbe;
 use Nuclear\system\Calls;
-use Nuclear\system\view\display;
+use driver\view\display;
 
    
 class IndirectRouter extends nuclear implements routerInterface

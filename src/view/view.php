@@ -1,10 +1,8 @@
 <?php
 
-namespace Nuclear\system\view;
+namespace driver\view;
 
-use Nuclear\system\view\display;
-use Nuclear\app\orbe;
-use Nuclear\configs\cfg;
+use driver\view\display;
 
 class view extends display
 {

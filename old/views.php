@@ -1,11 +1,11 @@
 <?php
 
-namespace Nuclear\system\view;
+namespace driver\view;
 
-use Nuclear\system\view\display;
+use driver\view\display;
 use Nuclear\app\orbe;
 use Nuclear\configs\cfg;
-use Nuclear\system\view\viewInterface;
+use driver\view\viewInterface;
 
 class views extends display implements viewInterface
 {

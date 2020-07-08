@@ -1,16 +1,13 @@
 <?php
 
-namespace Nuclear\system\control;
+namespace driver\control;
 
-use Nuclear\system\view\views;
-use Nuclear\system\model\orm;
-use Nuclear\alerts\alerts;
-use Nuclear\system\view\viewInterface;
+use driver\view\views;
     
 /**
  * Carrega registro de routes conforme a string de requesição
  */
-abstract class action implements viewInterface
+abstract class action
 { 
     private $notFound = null; // Endereço da página de Not Found do sistema
     static  $router   = null; // Objeto com as rotas definidas em tempo de execução

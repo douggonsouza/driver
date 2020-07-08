@@ -7,7 +7,7 @@ use Nuclear\system\request\request;
 use Nuclear\loader\loader;
 use Nuclear\configs\cfg;
 use Nuclear\app\orbe;
-use Nuclear\system\view\display;
+use driver\view\display;
    
 class routing
 {

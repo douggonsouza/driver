@@ -9,7 +9,7 @@ use Nuclear\system\nuclear;
 use Nuclear\loader\loader;
 use Nuclear\configs\cfg;
 use Nuclear\app\orbe;
-use Nuclear\system\view\display;
+use driver\view\display;
    
 class SubdomainRouter extends nuclear
 {

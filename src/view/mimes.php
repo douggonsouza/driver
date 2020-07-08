@@ -1,6 +1,6 @@
 <?php
 
-namespace Nuclear\system\view;
+namespace driver\view;
 
 class mimes{
 

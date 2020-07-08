@@ -6,4 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'driver\\control\\action' => $baseDir . '/src/control/action.php',
+    'driver\\helper\\html' => $baseDir . '/src/helper/html.php',
+    'driver\\router\\router' => $baseDir . '/src/router/router.php',
+    'driver\\view\\display' => $baseDir . '/src/view/display.php',
+    'driver\\view\\mimes' => $baseDir . '/src/view/mimes.php',
+    'driver\\view\\view' => $baseDir . '/src/view/view.php',
 );

@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'src\\' => array($baseDir . '/driver'),
+    'driver\\' => array($baseDir . '/src'),
 );
