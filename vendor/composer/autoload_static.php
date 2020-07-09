@@ -23,6 +23,7 @@ class ComposerStaticInitc9db19855b817ebee00c465e401d93a8
     public static $classMap = array (
         'driver\\control\\action' => __DIR__ . '/../..' . '/src/control/action.php',
         'driver\\helper\\html' => __DIR__ . '/../..' . '/src/helper/html.php',
+        'driver\\router\\autenticate' => __DIR__ . '/../..' . '/src/router/autenticate.php',
         'driver\\router\\router' => __DIR__ . '/../..' . '/src/router/router.php',
         'driver\\view\\display' => __DIR__ . '/../..' . '/src/view/display.php',
         'driver\\view\\mimes' => __DIR__ . '/../..' . '/src/view/mimes.php',
