@@ -20,8 +20,18 @@ abstract class router
     const _HEAD   = 'HEAD';
 
     protected $controller;
+    protected $typeRequest;
+    protected $localRequest;
+    protected $localRoot;
 
     protected $autenticate;
+
+    public function __construct(string $typeRequest, string $localRoot, string $localRequest)
+    {
+        $this->setTypeRequest($typeRequest);
+        $this->setLocalRoot($localRoot);
+        $this->setLocalRequest($localRequest);
+    }
 
     /**
      * Undocumented function
@@ -45,7 +55,7 @@ abstract class router
             return;
         }
 
-        if(strtolower($typeRequest) != strtolower(LOCAL_TYPE_REQUEST)){
+        if(strtolower($typeRequest) != strtolower($this->getTypeRequest())){
             return;
         }
 
@@ -57,7 +67,7 @@ abstract class router
 
         if (!preg_match(
             translatesToRegex($pattern),
-            urldecode(LOCAL_REQUEST),
+            $this->getLocalRequest(),
             $params)) {
             return;
         }
@@ -116,7 +126,7 @@ abstract class router
      */
     function autenticate(string $key)
     {
-        $this->setAutenticate(new autenticate);
+        $this->setAutenticate(new autenticate($this->getLocalRoot(),$this->getLocalRequest()));
         return $this->getAutenticate()->isHeaderAutenticate($key);
     }
 
@@ -158,6 +168,69 @@ abstract class router
     {
         if(isset($autenticate) && !empty($autenticate)){
             $this->autenticate = $autenticate;
+        }
+        return $this;
+    }
+
+    /**
+     * Get the value of typeRequest
+     */ 
+    public function getTypeRequest()
+    {
+        return $this->typeRequest;
+    }
+
+    /**
+     * Set the value of typeRequest
+     *
+     * @return  self
+     */ 
+    public function setTypeRequest($typeRequest)
+    {
+        if(isset($typeRequest) && !empty(($typeRequest))){
+            $this->typeRequest = $typeRequest;
+        }
+        return $this;
+    }
+
+    /**
+     * Get the value of localRequest
+     */ 
+    public function getLocalRequest()
+    {
+        return $this->localRequest;
+    }
+
+    /**
+     * Set the value of localRequest
+     *
+     * @return  self
+     */ 
+    public function setLocalRequest($localRequest)
+    {
+        if(isset($localRequest) && !empty($localRequest)){
+            $this->localRequest = urldecode($localRequest);
+        }
+        return $this;
+    }
+
+    /**
+     * Get the value of localRoot
+     */ 
+    public function getLocalRoot()
+    {
+        return $this->localRoot;
+    }
+
+    /**
+     * Set the value of localRoot
+     *
+     * @return  self
+     */ 
+    public function setLocalRoot($localRoot)
+    {
+        if(isset($localRoot) && !empty($localRoot)){
+            $this->localRoot = $localRoot;
         }
         return $this;
     }
