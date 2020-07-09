@@ -19,18 +19,26 @@ abstract class router
     const _DELETE = 'DELETE';
     const _HEAD   = 'HEAD';
 
-    protected $controller;
-    protected $typeRequest;
-    protected $localRequest;
-    protected $localRoot;
+    protected static $controller;
+    protected static $typeRequest;
+    protected static $localRequest;
+    protected static $localRoot;
 
-    protected $autenticate;
+    protected static $autenticate;
 
-    public function __construct(string $typeRequest, string $localRoot, string $localRequest)
+    /**
+     * colhe informações locais
+     *
+     * @param string $typeRequest
+     * @param string $localRoot
+     * @param string $localRequest
+     * @return void
+     */
+    public static function setInfoLocal(string $typeRequest, string $localRoot, string $localRequest)
     {
-        $this->setTypeRequest($typeRequest);
-        $this->setLocalRoot($localRoot);
-        $this->setLocalRequest($localRequest);
+        self::setTypeRequest($typeRequest);
+        self::setLocalRoot($localRoot);
+        self::setLocalRequest($localRequest);
     }
 
     /**
@@ -41,7 +49,7 @@ abstract class router
      * @param string $url
      * @return void
      */
-    protected function route($typeRequest, $pattern, $controller, $autenticate = null)
+    public static function route($typeRequest, $pattern, $controller, $autenticate = null)
     {
         if(!isset($typeRequest) || empty($typeRequest)){
             return;
@@ -55,24 +63,24 @@ abstract class router
             return;
         }
 
-        if(strtolower($typeRequest) != strtolower($this->getTypeRequest())){
+        if(strtolower($typeRequest) != strtolower(self::getTypeRequest())){
             return;
         }
 
         if(isset($autenticate) && !empty($autenticate)){
-            if(!$this->autenticate($autenticate)){
+            if(!self::autenticate($autenticate)){
                 return;
             }
         }
 
         if (!preg_match(
-            translatesToRegex($pattern),
-            $this->getLocalRequest(),
+            self::translatesToRegex($pattern),
+            self::getLocalRequest(),
             $params)) {
-            return;
+            return false;
         }
 
-        return instanceController($controller, $params);
+        return self::instanceController($controller, $params);
     }
 
     /**
@@ -81,7 +89,7 @@ abstract class router
      * @param string $text
      * @return stirng|null
      */
-    function translatesToRegex(string $text)
+    protected static function translatesToRegex(string $text)
     {
         if(!isset($text) || empty($text)){
             return $text;
@@ -102,15 +110,15 @@ abstract class router
      * @param array|null $params
      * @return void
      */
-    function instanceController(string $controller, array $params = null)
+    protected static function instanceController(string $controller, array $params = null)
     {
         if(!isset($controller) && empty($controller)){
             return;
         }
 
-        $this->setController(new $controller());
-        if(!is_null($this->getController())){
-            return $this->getController()->main(array(
+        self::setController(new $controller());
+        if(!is_null(self::getController())){
+            return self::getController()->main(array(
                 'url' => $params
             ));
         }
@@ -124,18 +132,18 @@ abstract class router
      * @param string $key
      * @return void
      */
-    function autenticate(string $key)
+    protected static function autenticate(string $key)
     {
-        $this->setAutenticate(new autenticate($this->getLocalRoot(),$this->getLocalRequest()));
-        return $this->getAutenticate()->isHeaderAutenticate($key);
+        self::setAutenticate(new autenticate(self::getLocalRoot(),self::getLocalRequest()));
+        return self::getAutenticate()->isHeaderAutenticate($key);
     }
 
     /**
      * Get the value of controller
      */ 
-    public function getController()
+    public static function getController()
     {
-        return $this->controller;
+        return self::$controller;
     }
 
     /**
@@ -143,20 +151,19 @@ abstract class router
      *
      * @return  self
      */ 
-    public function setController($controller)
+    public static function setController($controller)
     {
         if(isset($controller) && !empty($controller)){
-            $this->controller = $controller;
+            self::$controller = $controller;
         }
-        return $this;
     }
 
     /**
      * Get the value of autenticate
      */ 
-    public function getAutenticate()
+    public static function getAutenticate()
     {
-        return $this->autenticate;
+        return self::$autenticate;
     }
 
     /**
@@ -164,20 +171,19 @@ abstract class router
      *
      * @return  self
      */ 
-    public function setAutenticate($autenticate)
+    public static function setAutenticate($autenticate)
     {
         if(isset($autenticate) && !empty($autenticate)){
-            $this->autenticate = $autenticate;
+            self::$autenticate = $autenticate;
         }
-        return $this;
     }
 
     /**
      * Get the value of typeRequest
      */ 
-    public function getTypeRequest()
+    public static function getTypeRequest()
     {
-        return $this->typeRequest;
+        return self::$typeRequest;
     }
 
     /**
@@ -185,20 +191,19 @@ abstract class router
      *
      * @return  self
      */ 
-    public function setTypeRequest($typeRequest)
+    public static function setTypeRequest($typeRequest)
     {
         if(isset($typeRequest) && !empty(($typeRequest))){
-            $this->typeRequest = $typeRequest;
+            self::$typeRequest = $typeRequest;
         }
-        return $this;
     }
 
     /**
      * Get the value of localRequest
      */ 
-    public function getLocalRequest()
+    public static function getLocalRequest()
     {
-        return $this->localRequest;
+        return self::$localRequest;
     }
 
     /**
@@ -206,20 +211,19 @@ abstract class router
      *
      * @return  self
      */ 
-    public function setLocalRequest($localRequest)
+    public static function setLocalRequest($localRequest)
     {
         if(isset($localRequest) && !empty($localRequest)){
-            $this->localRequest = urldecode($localRequest);
+            self::$localRequest = urldecode($localRequest);
         }
-        return $this;
     }
 
     /**
      * Get the value of localRoot
      */ 
-    public function getLocalRoot()
+    public static function getLocalRoot()
     {
-        return $this->localRoot;
+        return self::$localRoot;
     }
 
     /**
@@ -227,11 +231,10 @@ abstract class router
      *
      * @return  self
      */ 
-    public function setLocalRoot($localRoot)
+    public static function setLocalRoot($localRoot)
     {
         if(isset($localRoot) && !empty($localRoot)){
-            $this->localRoot = $localRoot;
+            self::$localRoot = $localRoot;
         }
-        return $this;
     }
 }
