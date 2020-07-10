@@ -29,7 +29,7 @@
     // Carrega o autload do Composer
     include_once __DIR__ . '/vendor/autoload.php';
 
-    use driver\router\router;
+    use driver\products;
 
     // DEFINIÇÕES DE URL
     // Protocolo utilizado na requisição
@@ -41,8 +41,9 @@
     // Tipo de requisição
     define('LOCAL_TYPE_REQUEST', $_SERVER['REQUEST_METHOD']);
 
-    router::setInfoLocal(LOCAL_TYPE_REQUEST, LOCAL_ROOT, LOCAL_REQUEST);
+    $products = new products();
+    $local    = $products::defaultResourcesHeartwood($products::_LOCAL);
 
-    die(var_dump(router::route('GET','/admin/products/update/:number/:string',"driver\\helper\\html")));
+    die(var_dump($local));
 ?>
 

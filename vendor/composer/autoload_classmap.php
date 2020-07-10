@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'driver\\control\\action' => $baseDir . '/src/control/action.php',
     'driver\\helper\\html' => $baseDir . '/src/helper/html.php',
+    'driver\\products' => $baseDir . '/src/products.php',
     'driver\\router\\autenticate' => $baseDir . '/src/router/autenticate.php',
     'driver\\router\\router' => $baseDir . '/src/router/router.php',
     'driver\\view\\display' => $baseDir . '/src/view/display.php',

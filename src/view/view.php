@@ -4,107 +4,30 @@ namespace driver\view;
 
 use driver\view\display;
 
+// Pasta Root
+define('DIR_ROOT', $_SERVER['DOCUMENT_ROOT']);
+
 class view extends display
 {
-
-    //----- PROPERTS -----
-
-    private $my        = null;
-    private $variables = array();
-    public  $helpers   = null;
-    public  $layouts   = null;
-    public  $layout    = null;
-    public  $view      = null;
-    public  $templates = null;
-    public  $template  = null;
-    public  $localView = null;
-    
-    public function __construct($pathView = null, $view = null)
-    {
-        $this->setView($pathView);
-        $this->setTemplate($view);
-    }
-
-    /**
-     * Define a pasta de localização da LocalView
-     *
-     * @param string $view
-     * @return void
-     */
-    final public function setLocalView($view)
-    {
-        if(isset($view))
-            $this->localView = $view;
-    }
-
-    /**
-     * Acrescenta array à variables da página
-     * @param array $variables
-     */
-    final public function variables($variables = null)
-    {
-        if(!empty($variables)){
-            foreach($variables as $index => $value)
-                $this->variables[$index] = $value;
-            return true;
-        }
-        return false;
-    }
+    private $params = array();
+    public  $template = null;
+    public  $heartwoodModel = DIR_ROOT.'/src/common/models';
+    public  $heartwoodAssets = DIR_ROOT.'/src/common/assets';
+    public  $heartwoodManagments = DIR_ROOT.'/src/common/managments';
+    public  $heartwoodLayouts = DIR_ROOT.'/src/common/layouts';
 
 	/**
 	 * Requisita carregamento do template com endereço completo
 	 * @param unknown $my
 	 */
-    final public function view($model = null)
+    final public function view($params = null)
     {
-        if(isset($this->layout) && strlen($this->layout) > 0){
-            $this->variables($model);
-            parent::body($this->layouts, $this->variables);
+        if($this->getLayout()){
+            $this->setParams($params);
+            $this->defineVarGlobal();
+            parent::body($this->getLayout(), $this->getParams());
         }
     }
-    
-    /**
-     * Seta a propriedade layout
-     * @param string $local
-     * @return boolean
-     * @deprecated
-     */
-    final public function layout($local)
-    {
-        if(isset($local)){
-            $this->layout = $local;
-            return true;               
-        }
-        return false;
-    }
-    
-    /**
-     * Seta propriedade template
-     * @param type $local
-     * @return boolean
-     * @deprecated
-     */
-    final public function template($name = null)
-    {
-        if(!isset($name))
-            return false;
-
-        $this->template = $name;
-        return true;
-    }
-    
-    /**
-	 * Requisita o carregamento do template
-	 * @param unknown $my
-	 */
-    final public function content($name = null, $model = null)
-    {
-        $this->variables($model);
-        if(isset($name) && !empty($name))
-            $this->setTemplate($name);                    
-        parent::body($this->templates.DS.$this->template, $this->variables);
-        return true;
-	}
     
     /**
      * Responde a requisição com um array do tipo json
@@ -112,22 +35,11 @@ class view extends display
      */
     final public function json($params)
     {
-        if(!isset($params) || empty($params))
+        if(!isset($params) || empty($params)){
             throw new \Exception("Parameters JSON not found");
+        }
         header('Content-Type: application/json');
         exit(json_encode($params));
-    }
-    
-    /**
-     * Resposde a requisição com html
-     * @param string $html
-     */
-    final public function html($html)
-    {
-        if(!isset($html) || empty($html))
-            throw new \Exception("HTML responce not found");
-        header('Content-Type: application/json');
-        exit($html);
     }
     
     /**
@@ -135,13 +47,11 @@ class view extends display
      * @param string $name
      * @return type
      */
-    final public function partial($name, $model = null)
+    final public function partial($name, $params = null)
     {
-        $partial = str_replace(
-            array('/','//','\\','\\\\'),
-            '/',
-            $this->localView.'/../'.DS.$name);
-        parent::body($partial,$model);
+        $this->setParams($params);
+        $this->defineVarGlobal();
+        parent::body($name,$this->getParams());
         return;
 	}
 	
@@ -149,10 +59,10 @@ class view extends display
 	 * Cria variável global a partir de params
 	 * @param array $params
 	 */
-    private function define_var_global()
+    private function defineVarGlobal()
     {
-		if(isset($this->variables) && is_array($this->variables) && count($this->variables) > 0){
-            foreach($this->variables as $key => $vle){                       
+		if(is_array($this->getParams()) && count($this->getParams()) > 0){
+            foreach($this->getParams() as $key => $vle){                       
 			    $$key = $vle;
             }
             return true;    	
@@ -168,102 +78,6 @@ class view extends display
         if(strpos($filename,'.phtml') === false)
             return $filename.'.phtml';
         return $filename;
-    }
-
-    public function arrayToHTML($lista){
-
-        $sd = '';
-        if(isset($lista) && count($lista) > 0){
-            foreach($lista as $chv => $vle){
-                $sd .= '<div>';
-                if(is_array($vle))
-                    $sd .= '<span>'.$chv.' : '.$this->arrayToHTML($vle).'</span>';
-                elseif(is_string($vle))
-                    $sd .= '<span>'.$chv.' : '.$vle.'</span>';
-                $sd .= '</div>';
-            }
-        }
-        return $sd;
-	} 
-
-    /**
-     * Get the value of layouts
-     */ 
-    public function getLayouts()
-    {
-        return $this->layouts;
-    }
-
-    /**
-     * Set the value of layouts
-     *
-     * @return  self
-     */ 
-    public function setLayouts($layouts)
-    {
-        if(isset($layouts) && !empty($layouts))
-            $this->layouts = $layouts;
-        return $this;
-    }
-
-    /**
-     * Get the value of layout
-     */ 
-    public function getLayout()
-    {
-        return $this->layout;
-    }
-
-    /**
-     * Set the value of layout
-     *
-     * @return  self
-     */ 
-    public function setLayout($layout)
-    {
-        if(isset($layout) && !empty($layout))
-            $this->layout = $layout;
-        return $this;
-    }
-
-    /**
-     * Get the value of view
-     */ 
-    public function getView()
-    {
-        return $this->view;
-    }
-
-    /**
-     * Define a pasta de localização da View
-     *
-     * @param string $view
-     * @return void
-     */
-    final public function setView($view)
-    {
-        if(isset($view))
-            $this->view = $view;
-    }
-
-    /**
-     * Get the value of templates
-     */ 
-    public function getTemplates()
-    {
-        return $this->templates;
-    }
-
-    /**
-     * Set the value of templates
-     *
-     * @return  self
-     */ 
-    public function setTemplates($templates)
-    {
-        if(isset($templates) && !empty($templates))
-            $this->templates = $templates;
-        return $this;
     }
 
     /**
@@ -284,5 +98,87 @@ class view extends display
         if(isset($template) && !empty($template))
             $this->template = $this->existExtensionTemplate($template);
         return $this;
+    }
+
+    /**
+     * Get the value of params
+     */ 
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Set the value of params
+     *
+     * @return  self
+     */ 
+    public function setParams($params)
+    {
+        if(isset($params) && !empty($params)){
+            array_merge($this->params,$params);
+        }
+        return $this;
+    }
+
+    /**
+     * Get the value of layout
+     */ 
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * Set the value of layout
+     *
+     * @return  self
+     */ 
+    public function setLayout($layout)
+    {
+        if(isset($layout) && !empty($layout)){
+            $this->layout = $layout;
+        }
+        return $this;
+    }
+
+    /**
+     * Get the value of heartwoodModel
+     */ 
+    public function getHeartwoodModel()
+    {
+        return $this->heartwoodModel;
+    }
+
+    /**
+     * Get the value of heartwoodAssets
+     */ 
+    public function getHeartwoodAssets()
+    {
+        return $this->heartwoodAssets;
+    }
+
+    /**
+     * Get the value of heartwoodManagments
+     */ 
+    public function getHeartwoodManagments()
+    {
+        return $this->heartwoodManagments;
+    }
+
+    /**
+     * Get the value of heartwoodLayouts
+     */ 
+    public function getHeartwoodLayouts()
+    {
+        return $this->heartwoodLayouts;
+    }
+
+    /**
+     * Get the value of heartwoodDefaultLayout
+     */ 
+    public function getHeartwoodDefaultLayout()
+    {
+        return $this->getHeartwoodLayouts().'/default.phtml';
     }
 }        

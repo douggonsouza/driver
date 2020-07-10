@@ -118,9 +118,12 @@ abstract class router
 
         self::setController(new $controller());
         if(!is_null(self::getController())){
-            return self::getController()->main(array(
+            self::getController()->_after();
+            self::getController()->main(array(
                 'url' => $params
             ));
+            self::getController()->_before();
+            return;
         }
 
         return;
