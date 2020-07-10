@@ -16,13 +16,11 @@ class view extends display
 	 */
     final public function view($params = null)
     {
-        if($this->getLayout()){
-            $this->setParams($params);
-            parent::body(
-                self::getHeartwoodDefaultLayout(),
-                $this->getParams()
-            );
-        }
+        $this->setParams($params);
+        parent::body(
+            self::getHeartwoodDefaultLayout(),
+            $this->getParams()
+        );
     }
     
     /**

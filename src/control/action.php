@@ -29,25 +29,31 @@ abstract class action extends view
         return $local.'/resources';
     }
 
+    public function init($local, $className)
+    {
+        // Define o template para a controller
+        $name = explode("\\",(string) $className);
+        $template = self::defaultResponsesHeartwood($local).'/'.end($name).'.phtml';
+        $this->setTemplate($template);
+
+        return;
+    }
+
     /**
      * Para ser disparado antes
      *
      * @return void
      */
-    public function __before()
-    {
+    abstract public function _before();
 
-    }
 
     /**
      * Para ser disparado depois
      *
      * @return void
      */
-    public function __after()
-    {
+    abstract public function _after();
 
-    }
 
     /**
      * Undocumented function

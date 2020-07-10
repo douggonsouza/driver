@@ -116,17 +116,21 @@ abstract class router
             return;
         }
 
+        // inicia a controller
         self::setController(new $controller());
-        if(!is_null(self::getController())){
-            self::getController()->_after();
-            self::getController()->main(array(
-                'url' => $params
-            ));
-            self::getController()->_before();
-            return;
-        }
-
-        return;
+        // parametriza a classe action
+        self::getController()->init(
+            self::getController()::_LOCAL,
+            get_class(self::getController())
+        );
+        // chama evento anterior
+        self::getController()->_before();
+        // chama função main
+        self::getController()->main(array(
+            'url' => $params
+        ));
+        // chama evento posterior
+        self::getController()->_after();
     }
 
     /**
