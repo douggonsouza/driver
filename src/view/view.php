@@ -8,6 +8,7 @@ class view extends display
 {
     private   $params = array();
     public    $template = null;
+    protected $heartwoodResponses;
     protected static $heartwoodDefaultLayout = '/default.phtml';
 
 	/**
@@ -27,7 +28,7 @@ class view extends display
 	 * Requisita o carregamento do template
 	 * @param unknown $my
 	 */
-    final public function content(array $params)
+    public function content(array $params = null)
     {
         $this->setParams($params);                   
         parent::body(
@@ -55,11 +56,11 @@ class view extends display
      * @param string $local
      * @return type
      */
-    final public function partial($local, $params = null)
+    public function partial($local, $params = null)
     {
         $this->setParams($params);
         parent::body(
-            $local,
+            $this->getHeartwoodResponses().$local,
             $this->getParams()
         );
         return;
@@ -169,6 +170,14 @@ class view extends display
     }
 
     /**
+     * Get the value of heartwoodAssets
+     */ 
+    public static function getUrlHeartwoodAssets()
+    {
+        return strtolower(explode('/',$_SERVER['SERVER_PROTOCOL'])[0]).'://'.$_SERVER['HTTP_HOST'].'/src/common/assets';
+    }
+
+    /**
      * Get the value of heartwoodManagments
      */ 
     public static function getHeartwoodManagments()
@@ -202,5 +211,26 @@ class view extends display
         if(isset($heartwoodDefaultLayout) && !empty($heartwoodDefaultLayout)){
             self::$heartwoodDefaultLayout = $heartwoodDefaultLayout;
         }
+    }
+
+    /**
+     * Get the value of heartwoodResponses
+     */ 
+    public function getHeartwoodResponses()
+    {
+        return $this->heartwoodResponses;
+    }
+
+    /**
+     * Set the value of heartwoodResponses
+     *
+     * @return  self
+     */ 
+    public function setHeartwoodResponses($heartwoodResponses)
+    {
+        if(isset($heartwoodResponses) && !empty($heartwoodResponses)){
+            $this->heartwoodResponses = $heartwoodResponses;
+        }
+        return $this;
     }
 }        
