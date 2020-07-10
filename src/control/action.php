@@ -21,10 +21,10 @@ abstract class action extends view
      *
      * @return string
      */
-    public static function defaultResourcesHeartwood($local)
+    public static function defaultResponsesHeartwood($local)
     {
-        if(strpos($local, 'controller')){
-            return str_replace('controllers','resources',$local);
+        if(strpos($local, 'controllers')){
+            return str_replace('controllers','responses',$local);
         }
         return $local.'/resources';
     }

@@ -42,7 +42,7 @@
     define('LOCAL_TYPE_REQUEST', $_SERVER['REQUEST_METHOD']);
 
     $products = new products();
-    $local    = $products::defaultResourcesHeartwood($products::_LOCAL);
+    $local    = $products::defaultResponsesHeartwood($products::_LOCAL);
 
     die(var_dump($local));
 ?>

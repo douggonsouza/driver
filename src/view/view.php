@@ -4,17 +4,11 @@ namespace driver\view;
 
 use driver\view\display;
 
-// Pasta Root
-define('DIR_ROOT', $_SERVER['DOCUMENT_ROOT']);
-
 class view extends display
 {
-    private $params = array();
-    public  $template = null;
-    public  $heartwoodModel = DIR_ROOT.'/src/common/models';
-    public  $heartwoodAssets = DIR_ROOT.'/src/common/assets';
-    public  $heartwoodManagments = DIR_ROOT.'/src/common/managments';
-    public  $heartwoodLayouts = DIR_ROOT.'/src/common/layouts';
+    private   $params = array();
+    public    $template = null;
+    protected static $heartwoodDefaultLayout = '/default.phtml';
 
 	/**
 	 * Requisita carregamento do template com endereço completo
@@ -24,10 +18,26 @@ class view extends display
     {
         if($this->getLayout()){
             $this->setParams($params);
-            $this->defineVarGlobal();
-            parent::body($this->getLayout(), $this->getParams());
+            parent::body(
+                self::getHeartwoodDefaultLayout(),
+                $this->getParams()
+            );
         }
     }
+    
+    /**
+	 * Requisita o carregamento do template
+	 * @param unknown $my
+	 */
+    final public function content(array $params)
+    {
+        $this->setParams($params);                   
+        parent::body(
+            $this->getTemplate(),
+            $this->getParams()
+        );
+        return;
+	}
     
     /**
      * Responde a requisição com um array do tipo json
@@ -36,7 +46,7 @@ class view extends display
     final public function json($params)
     {
         if(!isset($params) || empty($params)){
-            throw new \Exception("Parameters JSON not found");
+            throw new \Exception("Parameters JSON not found.");
         }
         header('Content-Type: application/json');
         exit(json_encode($params));
@@ -44,14 +54,16 @@ class view extends display
     
     /**
      * Requisita o template na raiz da VIEW
-     * @param string $name
+     * @param string $local
      * @return type
      */
-    final public function partial($name, $params = null)
+    final public function partial($local, $params = null)
     {
         $this->setParams($params);
-        $this->defineVarGlobal();
-        parent::body($name,$this->getParams());
+        parent::body(
+            $local,
+            $this->getParams()
+        );
         return;
 	}
 	
@@ -145,40 +157,52 @@ class view extends display
     /**
      * Get the value of heartwoodModel
      */ 
-    public function getHeartwoodModel()
+    public static function getHeartwoodModel()
     {
-        return $this->heartwoodModel;
+        return $_SERVER['DOCUMENT_ROOT'].'/src/common/models';
     }
 
     /**
      * Get the value of heartwoodAssets
      */ 
-    public function getHeartwoodAssets()
+    public static function getHeartwoodAssets()
     {
-        return $this->heartwoodAssets;
+        return $_SERVER['DOCUMENT_ROOT'].'/src/common/assets';
     }
 
     /**
      * Get the value of heartwoodManagments
      */ 
-    public function getHeartwoodManagments()
+    public static function getHeartwoodManagments()
     {
-        return $this->heartwoodManagments;
+        return $_SERVER['DOCUMENT_ROOT'].'/src/common/managments';
     }
 
     /**
      * Get the value of heartwoodLayouts
      */ 
-    public function getHeartwoodLayouts()
+    public static function getHeartwoodLayouts()
     {
-        return $this->heartwoodLayouts;
+        return $_SERVER['DOCUMENT_ROOT'].'/src/common/layouts';
     }
 
     /**
      * Get the value of heartwoodDefaultLayout
      */ 
-    public function getHeartwoodDefaultLayout()
+    public static function getHeartwoodDefaultLayout()
     {
-        return $this->getHeartwoodLayouts().'/default.phtml';
+        return self::getHeartwoodLayouts().self::$heartwoodDefaultLayout;
+    }
+
+    /**
+     * Set the value of heartwoodDefaultLayout
+     *
+     * @return  self
+     */ 
+    public static function setHeartwoodDefaultLayout($heartwoodDefaultLayout)
+    {
+        if(isset($heartwoodDefaultLayout) && !empty($heartwoodDefaultLayout)){
+            self::$heartwoodDefaultLayout = $heartwoodDefaultLayout;
+        }
     }
 }        

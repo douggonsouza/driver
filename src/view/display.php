@@ -12,15 +12,18 @@ class display{
 	 */
     final function body($local, $params = null)
     {
-        if(file_exists($local)){
-            if(isset($params) && !empty($params)){
-                foreach($params as $key => $vle){
-                    $$key = $vle;
-                }                        
-            }
-            return include($local);
+        if(!file_exists($local)){
+            return '';
         }
-        return '';
+
+        if(isset($params) && !empty($params)){
+            foreach($params as $key => $vle){
+                $$key = $vle;
+            }                        
+        }
+        
+        return include($local);
+
 	}
                
     /**
