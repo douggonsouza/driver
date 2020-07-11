@@ -110,7 +110,7 @@ abstract class router
      * @param array|null $params
      * @return void
      */
-    protected static function instanceController(string $controller, array $params = null)
+    public static function instanceController(string $controller, array $params = null)
     {
         if(!isset($controller) && empty($controller)){
             return;

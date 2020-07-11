@@ -3,6 +3,7 @@
 namespace driver\control;
 
 use driver\view\view;
+use driver\router\router;
 
 abstract class action extends view
 {
@@ -37,7 +38,8 @@ abstract class action extends view
         // Responses atual
         $this->setHeartwoodResponses(self::defaultResponsesHeartwood($local));
 
-        // O template da controller
+        // Set Layout e template da controller
+        $this->setLayout(self::getHeartwoodDefaultLayout());
         $name = explode("\\",(string) $className);
         $this->setTemplate(self::defaultResponsesHeartwood($local).'/'.end($name).'.phtml');
 
@@ -58,9 +60,9 @@ abstract class action extends view
      * @param string $local
      * @return type
      */
-    public function partial($local, $params = null)
+    public function partial($controller, $params = null)
     {
-        return parent::partial($local, $params);
+        return router::instanceController($controller, $params);
     }
 
     /**

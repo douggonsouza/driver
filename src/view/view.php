@@ -9,7 +9,7 @@ class view extends display
     private   $params = array();
     public    $template = null;
     protected $heartwoodResponses;
-    protected static $heartwoodDefaultLayout = '/default.phtml';
+    protected $layout;
 
 	/**
 	 * Requisita carregamento do template com endereço completo
@@ -19,7 +19,7 @@ class view extends display
     {
         $this->setParams($params);
         parent::body(
-            self::getHeartwoodDefaultLayout(),
+            self::getLayout(),
             $this->getParams()
         );
     }
@@ -49,36 +49,6 @@ class view extends display
         }
         header('Content-Type: application/json');
         exit(json_encode($params));
-    }
-    
-    /**
-     * Requisita o template na raiz da VIEW
-     * @param string $local
-     * @return type
-     */
-    public function partial($local, $params = null)
-    {
-        $this->setParams($params);
-        parent::body(
-            $this->getHeartwoodResponses().$local,
-            $this->getParams()
-        );
-        return;
-	}
-	
-	/**
-	 * Cria variável global a partir de params
-	 * @param array $params
-	 */
-    private function defineVarGlobal()
-    {
-		if(is_array($this->getParams()) && count($this->getParams()) > 0){
-            foreach($this->getParams() as $key => $vle){                       
-			    $$key = $vle;
-            }
-            return true;    	
-		}    		
-        return false; 		 
     }
     
     /**
@@ -198,19 +168,7 @@ class view extends display
      */ 
     public static function getHeartwoodDefaultLayout()
     {
-        return self::getHeartwoodLayouts().self::$heartwoodDefaultLayout;
-    }
-
-    /**
-     * Set the value of heartwoodDefaultLayout
-     *
-     * @return  self
-     */ 
-    public static function setHeartwoodDefaultLayout($heartwoodDefaultLayout)
-    {
-        if(isset($heartwoodDefaultLayout) && !empty($heartwoodDefaultLayout)){
-            self::$heartwoodDefaultLayout = $heartwoodDefaultLayout;
-        }
+        return self::getHeartwoodLayouts().'/default.phtml';
     }
 
     /**
