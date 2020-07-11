@@ -32,18 +32,23 @@ abstract class action extends view
 
     public function init($local, $className)
     {
-        // Assets Commons
-        define('_assets', self::getUrlHeartwoodAssets());
+        try{
+            // Assets Commons
+            define('_assets', self::getUrlHeartwoodAssets());
 
-        // Responses atual
-        $this->setHeartwoodResponses(self::defaultResponsesHeartwood($local));
+            // Responses atual
+            $this->setHeartwoodResponses(self::defaultResponsesHeartwood($local));
 
-        // Set Layout e template da controller
-        $this->setLayout(self::getHeartwoodDefaultLayout());
-        $name = explode("\\",(string) $className);
-        $this->setTemplate(self::defaultResponsesHeartwood($local).'/'.end($name).'.phtml');
+            // Set Layout e template da controller
+            $this->setLayout(self::getHeartwoodDefaultLayout());
+            $name = explode("\\",(string) $className);
+            $this->setTemplate(self::defaultResponsesHeartwood($local).'/'.end($name).'.phtml');
 
-        return;
+            return true;
+        }
+        catch(\Exception $e){
+            return false;
+        }
     }
 
     /**
