@@ -6,24 +6,40 @@ class autenticate
 {
 
     protected $headerAutenticate;
+    protected $authorization;
+    protected $protocol;
     protected $localRoot;
     protected $localRequest;
 
-    public function __construct(string $localRoot, string $localRequest)
+    public function __construct(string $protocol, string $localRoot, string $localRequest)
     {
+        $this->setProtocol($protocol);
         $this->setLocalRoot($localRoot);
-        $this->setLocalRequest($locaRequest);
+        $this->setLocalRequest($localRequest);
+        $this->setHeaderAutenticate(getallheaders());
+        $this->authorization();
     }
 
     /**
-     * Valida o autenticate do heard
+     * Colhe a authori
      *
-     * @param string $key
      * @return void
      */
-    function asHeaderAutenticate(string $key)
+    protected function authorization()
     {
-        $this->setHeaderAutenticate(get_headers($this->getLocalRoot().DS.$this->getLocalRequest(), 1));
+        if(empty($this->getHeaderAutenticate())){
+            return false;
+        }
+
+        $authorization = null;
+        if(empty($this->getHeaderAutenticate()['Authorization'])){
+            return false;
+        }
+
+        $authorization = str_replace('Bearer ','',$this->getHeaderAutenticate()['Authorization']);
+
+        $this->setAuthorization($authorization);
+        return true;
     }
 
     /**
@@ -34,7 +50,7 @@ class autenticate
      */
     function isHeaderAutenticate(string $key)
     {
-        return $this->getHeaderAutenticate() == $key;
+        return $this->getAuthorization() === $key;
     }
 
     /**
@@ -97,6 +113,50 @@ class autenticate
         if(isset($localRequest) && !empty($localRequest)){
             $this->localRequest = $localRequest;
         }
+        return $this;
+    }
+
+    /**
+     * Get the value of protocol
+     */ 
+    public function getProtocol()
+    {
+        return $this->protocol;
+    }
+
+    /**
+     * Set the value of protocol
+     *
+     * @return  self
+     */ 
+    public function setProtocol($protocol)
+    {
+        if(isset($protocol) && !empty($protocol)){
+            $this->protocol = $protocol;
+        }
+        
+        return $this;
+    }
+
+    /**
+     * Get the value of authorization
+     */ 
+    public function getAuthorization()
+    {
+        return $this->authorization;
+    }
+
+    /**
+     * Set the value of authorization
+     *
+     * @return  self
+     */ 
+    protected function setAuthorization($authorization)
+    {
+        if(isset($authorization) && !empty($authorization)){
+            $this->authorization = $authorization;
+        }
+        
         return $this;
     }
 }

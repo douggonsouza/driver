@@ -20,6 +20,7 @@ abstract class router
     const _HEAD   = 'HEAD';
 
     protected static $controller;
+    protected static $protocol;
     protected static $typeRequest;
     protected static $localRequest;
     protected static $localRoot;
@@ -34,8 +35,9 @@ abstract class router
      * @param string $localRequest
      * @return void
      */
-    public static function setInfoLocal(string $typeRequest, string $localRoot, string $localRequest)
+    public static function setInfoLocal(string $protocol, string $typeRequest, string $localRoot, string $localRequest)
     {
+        self::setProtocol($protocol);
         self::setTypeRequest($typeRequest);
         self::setLocalRoot($localRoot);
         self::setLocalRequest($localRequest);
@@ -248,7 +250,7 @@ abstract class router
      */
     protected static function autenticate(string $key)
     {
-        self::setAutenticate(new autenticate(self::getLocalRoot(),self::getLocalRequest()));
+        self::setAutenticate(new autenticate(self::getProtocol(), self::getLocalRoot(), self::getLocalRequest()));
         return self::getAutenticate()->isHeaderAutenticate($key);
     }
 
@@ -349,6 +351,26 @@ abstract class router
     {
         if(isset($localRoot) && !empty($localRoot)){
             self::$localRoot = $localRoot;
+        }
+    }
+
+    /**
+     * Get the value of protocol
+     */ 
+    public static function getProtocol()
+    {
+        return self::$protocol;
+    }
+
+    /**
+     * Set the value of protocol
+     *
+     * @return  self
+     */ 
+    public static function setProtocol($protocol)
+    {
+        if(isset($protocol) && !empty($protocol)){
+            self::$protocol = $protocol;
         }
     }
 }
