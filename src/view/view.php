@@ -62,6 +62,23 @@ class view extends display
     }
 
     /**
+     * Seta um valor de parâmetro
+     *
+     * @param string $name
+     * @param mixed  $value
+     * @return bool
+     */
+    public function param(string $name, $value)
+    {
+        if(!isset($name)){
+            return false;
+        }
+        
+        $this->params[$name] = $value;
+        return true;
+    }
+
+    /**
      * Get the value of template
      */ 
     public function getTemplate()

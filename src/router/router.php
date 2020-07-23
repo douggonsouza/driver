@@ -66,7 +66,7 @@ abstract class router
         }
 
         if(strtolower($typeRequest) != strtolower(self::getTypeRequest())){
-            exit(self::http_response_code(500));
+            return;
         }
 
         if(isset($autenticate) && !empty($autenticate)){
