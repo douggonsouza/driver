@@ -10,7 +10,7 @@ abstract class action extends view
     const _LOCAL = __DIR__;
 
     /**
-     * Funçã a ser executada no contexto da action
+     * Funï¿½ï¿½ a ser executada no contexto da action
      *
      * @param array $info
      * @return void
@@ -18,7 +18,7 @@ abstract class action extends view
     abstract public function main(array $info);
 
     /**
-     * Expóe a pasta de resource do framework Heartwood
+     * Expï¿½e a pasta de resource do framework Heartwood
      *
      * @return string
      */
@@ -35,6 +35,7 @@ abstract class action extends view
         try{
             // Assets Commons
             define('_assets', self::getUrlHeartwoodAssets());
+            define('_root', $_SERVER['HTTP_HOST']);
 
             // Responses atual
             $this->setHeartwoodResponses(self::defaultResponsesHeartwood($local));
