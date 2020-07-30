@@ -62,7 +62,7 @@ class view extends display
     }
 
     /**
-     * Seta um valor de parâmetro
+     * Seta um valor de parï¿½metro
      *
      * @param string $name
      * @param mixed  $value
@@ -114,7 +114,7 @@ class view extends display
     public function setParams($params)
     {
         if(isset($params) && !empty($params)){
-            array_merge($this->params,$params);
+            $this->params = array_merge($this->params,$params);
         }
         return $this;
     }
