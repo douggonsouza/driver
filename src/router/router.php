@@ -1,18 +1,19 @@
 <?php
 
 // REGEX
-// :number = somente n˙meros = (\d+)
+// :number = somente n√∫meros = (\d+)
 // :char   = somente letras  = ([a-zA-Z]+)
-// :alfanumeric = letras e n˙meros = ([a-zA-Z0-9]+)
-// :string = letras, espaÁo e caracteres especiais = ([a-zA-Z0-9 .\-\_]+)
+// :alfanumeric = letras e n√∫meros = ([a-zA-Z0-9]+)
+// :string = letras, espa√ßo e caracteres especiais = ([a-zA-Z0-9 .\-\_]+)
 
 namespace driver\router;
 
 use driver\router\autenticate;
+use alerts\alerts\alerts;
 
 abstract class router
 {
-    // TIPOS DE REQUISI«√O
+    // TIPOS DE REQUISI√á√ÉO
     const _POST   = 'POST';
     const _GET    = 'GET';
     const _PUT    = 'PUT';
@@ -24,11 +25,12 @@ abstract class router
     protected static $typeRequest;
     protected static $localRequest;
     protected static $localRoot;
+    protected static $params;
 
     protected static $autenticate;
 
     /**
-     * colhe informaÁıes locais
+     * colhe informa√ß√µes locais
      *
      * @param string $typeRequest
      * @param string $localRoot
@@ -82,8 +84,11 @@ abstract class router
                 return;
         }
 
+        // salvar $par√¢metros
+        self::setParams($params);
+
         exit(self::http_response_code(
-            self::instanceController($controller, $params)
+            self::instanceController($controller, self::getParams())
         ));
     }
 
@@ -136,7 +141,7 @@ abstract class router
             }
             // chama evento anterior
             self::getController()->_before();
-            // chama funÁ„o main
+            // chama funÔøΩÔøΩo main
             self::getController()->main(array(
                 'url' => $params
             ));
@@ -150,6 +155,48 @@ abstract class router
         }
     }
 
+    /**
+     * Recarrega a classe de controller
+     *
+     * @param string     $controller
+     * @return mixed
+     */
+    public static function redirectAction(string $controller)
+    {
+        if(empty(self::getParams())){
+            return 500;
+        }
+
+        try{
+            return self::instanceController($controller, self::getParams());
+        }
+        catch(\Exeption $e){
+            return 500;
+        }
+    }
+
+    /**
+     * Recarrega a classe de controller
+     *
+     * @param string     $urlRelative
+     * @return mixed
+     */
+    public static function relativeRedirection(string $urlRelative)
+    {
+        if(!isset($urlRelative) || empty($urlRelative) ){
+            return;
+        }
+
+        header("Location: $urlRelative");
+        exit;
+    }
+
+    /**
+     * Devolve c√≥digo de resposta
+     *
+     * @param int $code
+     * @return int
+     */
     public static function http_response_code($code = NULL)
     {
         if(!isset($code) || empty($code)){
@@ -371,6 +418,26 @@ abstract class router
     {
         if(isset($protocol) && !empty($protocol)){
             self::$protocol = $protocol;
+        }
+    }
+
+    /**
+     * Get the value of params
+     */ 
+    public static function getParams()
+    {
+        return self::$params;
+    }
+
+    /**
+     * Set the value of params
+     *
+     * @return  self
+     */ 
+    public static function setParams($params)
+    {
+        if(isset($params) && !empty($params)){
+            self::$params = $params;
         }
     }
 }
