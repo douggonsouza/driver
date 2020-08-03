@@ -10,7 +10,7 @@ abstract class action extends view
     const _LOCAL = __DIR__;
 
     /**
-     * Fun�� a ser executada no contexto da action
+     * Função a ser executada no contexto da action
      *
      * @param array $info
      * @return void
@@ -18,7 +18,7 @@ abstract class action extends view
     abstract public function main(array $info);
 
     /**
-     * Exp�e a pasta de resource do framework Heartwood
+     * Expõe a pasta de resource do framework Heartwood
      *
      * @return string
      */
@@ -76,7 +76,10 @@ abstract class action extends view
      *
      * @return void
      */
-    abstract public function _before();
+    public function _before()
+    {
+        return null;
+    }
 
 
     /**
@@ -84,21 +87,16 @@ abstract class action extends view
      *
      * @return void
      */
-    abstract public function _after();
-
+    public function _after()
+    {
+        return null;
+    }
 
     /**
-     * Undocumented function
-     *
-     * @param [type] $local
-     * @return void
+     * Devolve o slug definido para a area
      */
-    final public function redirect($local)
+    public function area()
     {
-        if(isset($local) && strlen($local) > 0){
-            header("location: ".$local);
-            die();
-        }
-        return false;
+        return null;
     }
 }
