@@ -20,7 +20,7 @@ class html
         $sField = (isset($name) && !empty($name))? 'id="field-'.$name.'"': null;
         if(isset($tags) && !empty($tags)){
             $sClass    = (isset($tags['class']) && !empty($tags['class']))? 'class="'.$tags['class'].'"': null;
-            $sRequired = (isset($tags['required']) && !empty($tags['required']))? 'required': null;
+            $sRequired = (isset($tags['required']) && !empty($tags['required']))? 'required="required"': null;
             $sDisabled = (isset($tags['disabled']) && !empty($tags['disabled']))? 'disabled="disabled"': null;
             $sMultiple = (isset($tags['multiple']) && !empty($tags['multiple']))? 'multiple="multiple"': null;
             $sSize     = (isset($tags['size']) && !empty($tags['size']))? 'size="'.$tags['size'].'"': null;
