@@ -62,6 +62,17 @@ abstract class action extends view
     }
 
     /**
+     * Cria o array de busca
+     *
+     * @param array $post
+     * @return void
+     */
+    protected function where(array $post = null)
+    {
+        return array('active = 1');
+    }
+
+    /**
      * Requisita o template na raiz da VIEW
      * @param string $local
      * @return type
