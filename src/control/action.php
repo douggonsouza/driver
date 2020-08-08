@@ -36,6 +36,7 @@ abstract class action extends view
             // Assets Commons
             define('_assets', self::getUrlHeartwoodAssets());
             define('_root', strtolower(explode('/',$_SERVER['SERVER_PROTOCOL'])[0]).'://'.$_SERVER['HTTP_HOST']);
+            define('_upload', strtolower(explode('/',$_SERVER['SERVER_PROTOCOL'])[0]).'://'.$_SERVER['HTTP_HOST'].'/uploads');
 
             // Responses atual
             $this->setHeartwoodResponses(self::defaultResponsesHeartwood($local));
