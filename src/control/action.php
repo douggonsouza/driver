@@ -80,6 +80,10 @@ abstract class action extends view
      */
     public function partial($controller, $params = null)
     {
+        if(!class_exists($controller)){
+            throw new \Exception('Inexistência da classe em memória.');
+        }
+
         return router::instanceController($controller, $params);
     }
 
